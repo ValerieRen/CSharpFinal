@@ -23,7 +23,7 @@ namespace CalculatorTests
                    where n % a == 0
                    select a;
         }
-
+        
     }
 
 }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+
 namespace Calculator.CheckBook
 {
     /// <summary>
@@ -24,9 +25,9 @@ namespace Calculator.CheckBook
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var VM = new CheckBookVM();
-            DataContext = VM;
-            VM.Fill();
+            //var VM = new CheckBookVM();
+            //DataContext = VM;
+            //VM.Fill();
         }
     }
 }

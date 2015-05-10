@@ -52,17 +52,12 @@
   <ItemGroup>
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CheckBookTest.cs" />
     <Compile Include="Threading101.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Calculator\Calculator.csproj">
       <Project>{5a2193e2-2e08-400c-b55a-b3314716b30d}</Project>
       <Name>Calculator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WebApplication\Model.csproj">
-      <Project>{b81dd78f-3f50-4b77-a868-7f5845e683bb}</Project>
-      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -24,6 +24,7 @@ namespace Calculator
             InitializeComponent();
         }
         TaskCompletionSource<string> tSource = new TaskCompletionSource<string>();
+
         public Task<string> Login()
         {
             Show();
@@ -31,11 +32,11 @@ namespace Calculator
             wb.Navigate(loginUrl);
             return tSource.Task;
         }
+
         private void wb_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             var match = System.Text.RegularExpressions.Regex.Match(e.Uri.Fragment, "token=(.*)&");
-            if (match.Success)
-            {
+            if (match.Success) {
                 tSource.SetResult(match.Groups[1].Value);
                 this.Close();
             }

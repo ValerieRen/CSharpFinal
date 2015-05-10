@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace Calculator
 {
-    public class CalculatorVM : BaseVM
+    public class CalculatorVM: BaseVM
     {
         Operation _Op = new BinaryOperation();
         public Operation Op
@@ -28,12 +28,9 @@ namespace Calculator
         {
             get
             {
-                if (_Clear == null)
-                {
-                    _Clear = new DelegateCommand
-                    {
-                        ExecuteFunction = x =>
-                        {
+                if (_Clear == null) {
+                    _Clear = new DelegateCommand {
+                        ExecuteFunction = x => {
                             Operations.Clear();
                             Op = new BinaryOperation { };
                         },
@@ -49,13 +46,11 @@ namespace Calculator
         {
             get
             {
-                return new DelegateCommand
-                {
-                    ExecuteFunction = x =>
-                    {
+                return new DelegateCommand {
+                    ExecuteFunction = x =>{
                         var t = Task.Run(() => string.Join(",", GetFactors((int)Op.PreviousTotal).ToArray()));
                         t.ContinueWith(t2 => System.Windows.MessageBox.Show(t2.Result));
-
+                        
                         System.Windows.MessageBox.Show("Next");
                     }
                 };
