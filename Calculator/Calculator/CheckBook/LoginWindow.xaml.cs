@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Calculator
+namespace Calculator.CheckBook
 {
     /// <summary>
     /// Interaction logic for LoginWindow.xaml
@@ -28,7 +28,9 @@ namespace Calculator
         public Task<string> Login()
         {
             Show();
-            var loginUrl = "https://www.facebook.com/dialog/oauth?client_id=1438926676407670&redirect_uri=https://www.facebook.com/connect/login_success.html&response_type=token";
+            var loginUrl = "https://accounts.google.com/AddSession?sacu=1&continue=https%3A%2F%2Faccounts.google.com%2FManageAccount";
+
+            //var loginUrl = "https://www.facebook.com/dialog/oauth?client_id=1438926676407670&redirect_uri=https://www.facebook.com/connect/login_success.html&response_type=token";
             wb.Navigate(loginUrl);
             return tSource.Task;
         }

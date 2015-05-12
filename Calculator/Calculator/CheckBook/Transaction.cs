@@ -2,41 +2,27 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
-using System.Net.Http;
-
 
 namespace Calculator.CheckBook
 {
-    public class CbDb : DbContext
-    {
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Account> Accounts { get; set; }
-    }
     public class Transaction : BaseVM
     {
         public int Id { get; set; }
 
-        private CheckBookVM _VM;
-        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-        public CheckBookVM VM
-        {
-            get { return _VM; }
-            set { _VM = value; OnPropertyChanged(); }
+
+        /*
+        public IEnumerable<Transaction> SimilarTransactions {
+            get {
+                return from t in VM.Transactions
+                       where t.Payee == this.Payee
+                       select t;
+            }
         }
-
-        /* public IEnumerable<Transaction> SimilarTransactions
-         {
-             get
-             {
-                 return from t in VM.Transactions
-                        where t.Payee == this.Payee
-                        select t;
-             }
-         }*/
-
+        */
         private DateTime _Date;
         public DateTime Date
         {
@@ -57,14 +43,23 @@ namespace Calculator.CheckBook
         public virtual Account Account
         {
             get { return _Account; }
-            set { _Account = value; OnPropertyChanged(); if (VM != null) VM.OnPropertyChanged("Accounts"); }
+            set { _Account = value; OnPropertyChanged(); }
         }
 
         private double _Amount;
         public double Amount
         {
             get { return _Amount; }
-            set { _Amount = value; OnPropertyChanged(); }
+            set { _Amount = value; OnPropertyChanged(); OnPropertyChanged("Currency2"); }
+        }
+
+        public double Currency2
+        {
+            get
+            {
+                if (ExchangeRateSing.Instance.Rates == null) return 0;
+                return Amount * ExchangeRateSing.Instance.Rates.CAD;
+            }
         }
 
         private string _Tag;
@@ -76,6 +71,7 @@ namespace Calculator.CheckBook
 
 
     }
+
     public class Account
     {
         public int Id { get; set; }
@@ -85,11 +81,13 @@ namespace Calculator.CheckBook
 
         public virtual IList<Transaction> Transactions { get; set; }
     }
+
     public class CheckBookVM : BaseVM
     {
         public CheckBookVM()
         {
         }
+
         CbDb _Db = new CbDb();
 
         private int _RowsPerPage = 5;
@@ -128,12 +126,12 @@ namespace Calculator.CheckBook
                 };
             }
         }
+
         public DelegateCommand MoveNext
         {
             get
             {
-                return new DelegateCommand
-                {
+                return new DelegateCommand {
                     ExecuteFunction = _ => CurrentPage++,
                     CanExecuteFunction = _ => CurrentPage * _RowsPerPage < Transactions.Count
                 };
@@ -144,8 +142,7 @@ namespace Calculator.CheckBook
         {
             get
             {
-                return new DelegateCommand
-                {
+                return new DelegateCommand {
                     ExecuteFunction = _ => _Db.SaveChanges(),
                     CanExecuteFunction = _ => _Db.ChangeTracker.HasChanges()
                 };
@@ -156,23 +153,30 @@ namespace Calculator.CheckBook
         {
             get
             {
-                return new DelegateCommand
-                {
-                    ExecuteFunction = _ =>
-                    {
+                return new DelegateCommand {
+                    ExecuteFunction = _ => {
                         Transactions.Add(new Transaction { });
                         CurrentPage = Transactions.Count / _RowsPerPage + 1;
                     }
                 };
             }
         }
-        /*  public DelegateCommand Remove
-          {
-              get
-              {
-                  ;
-              }
-          }*/
+
+        public DelegateCommand Remove
+        {
+            get
+            {
+                return new DelegateCommand
+                {
+                    ExecuteFunction = _ =>
+                    {
+                        //Transactions.Remove();
+                        CurrentPage = Transactions.Count / _RowsPerPage - 1;
+                    }
+                };
+            }
+        }
+
         private Rates _CurrentRates;
 
         public Rates CurrentRates
@@ -181,22 +185,31 @@ namespace Calculator.CheckBook
             set { _CurrentRates = value; OnPropertyChanged(); }
         }
 
+        private string _Name;
+
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value; OnPropertyChanged(); }
+        }
+        private string _Email;
+
+        public string Email
+        {
+            get { return _Email; }
+            set { _Email = value; OnPropertyChanged(); }
+        }
+        private string _Picture;
+
+        public string Picture
+        {
+            get { return _Picture; }
+            set { _Picture = value; OnPropertyChanged(); }
+        }
+        
 
         public async void Fill()
         {
-            Transactions = _Db.Transactions.Local;
-            _Db.Accounts.ToList();
-            _Db.Transactions.ToList();
-            new ObservableCollection<Transaction>();
-
-            var http = new HttpClient();
-            var results = await http.GetAsync("http://openexchangerates.org/api/latest.json?app_id=2f23629162b444b580bc03970c41caad");
-            var currencies = await results.Content.ReadAsAsync<ExchageRate>();
-            CurrentRates = currencies.rates;
-            ExchangeRateSing.Instance.Rates = currencies.rates;
-            OnPropertyChanged("CurrentTransactions"); OnPropertyChanged("Transactions");
-
-            /*
             Transactions = _Db.Transactions.Local;
             _Db.Accounts.ToList();
             _Db.Transactions.ToList();
@@ -207,15 +220,19 @@ namespace Calculator.CheckBook
 
             var http = new HttpClient();
 
-            dynamic me = Newtonsoft.Json.JsonConvert.DeserializeObject(await http.GetStringAsync("https://graph.facebook.com/me?access_token=" + token));
+            dynamic me = Newtonsoft.Json.JsonConvert.DeserializeObject(await http.GetStringAsync("https://graph.google.com/me?access_token=" + token));
 
             Name = me.name;
-            Picture = "https://graph.facebook.com/" + me.id + "/picture";
+            Picture = "https://graph.google.com/" + me.id + "/picture";
 
-            
-            OnPropertyChanged("CurrentTransactions"); OnPropertyChanged("Transactions");*/
+            var results = await http.GetAsync("http://openexchangerates.org/api/latest.json?app_id=2f23629162b444b580bc03970c41caad");
+            var currencies = await results.Content.ReadAsAsync<ExchageRate>();
+            CurrentRates = currencies.rates;
+            ExchangeRateSing.Instance.Rates = currencies.rates;
+            OnPropertyChanged("CurrentTransactions"); OnPropertyChanged("Transactions");
         }
     }
+
     public class ExchangeRateSing
     {
         private ExchangeRateSing() { }
@@ -231,7 +248,7 @@ namespace Calculator.CheckBook
             get { return _Rates; }
             set { _Rates = value; }
         }
-
+        
     }
     public class ExchageRate
     {
@@ -241,6 +258,7 @@ namespace Calculator.CheckBook
         public string _base { get; set; }
         public Rates rates { get; set; }
     }
+
     public class Rates
     {
         public float AED { get; set; }
@@ -413,4 +431,5 @@ namespace Calculator.CheckBook
         public float ZMW { get; set; }
         public float ZWL { get; set; }
     }
+
 }
