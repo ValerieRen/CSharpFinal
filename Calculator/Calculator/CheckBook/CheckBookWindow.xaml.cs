@@ -29,6 +29,21 @@ namespace Calculator.CheckBook
             var VM = new CheckBookVM();
             DataContext = VM;
             VM.Fill();
+            System.Windows.Data.CollectionViewSource transactionViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("transactionViewSource")));
+            // Load data by setting the CollectionViewSource.Source property:
+            // transactionViewSource.Source = [generic data source]
+        }
+
+        private void ShowAccount(object sender, RoutedEventArgs e)
+        {
+            AccountEditWindow accEdit = new AccountEditWindow();
+            accEdit.ShowDialog();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ReportForm rp = new ReportForm();
+            rp.Show();
         }
     }
 }
