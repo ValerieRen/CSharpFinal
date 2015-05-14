@@ -113,7 +113,7 @@ namespace Calculator.CheckBook
         public ObservableCollection<Account> Accounts
         {
             get { return _Accounts; }
-            set { _Accounts = value; OnPropertyChanged(); }
+            set { _Accounts = value; OnPropertyChanged(); OnPropertyChanged("Institution"); }
         }
 
         public IEnumerable<Account> CurrentAccount

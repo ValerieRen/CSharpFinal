@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MySql.Data.MySqlClient;
 
 namespace Calculator.CheckBook
 {
@@ -27,6 +28,33 @@ namespace Calculator.CheckBook
         private void ShowCheckBookWindow(object sender, RoutedEventArgs e)
         {
             this.Close();
+            FillCombobox();
+        }
+
+        void FillCombobox()
+        {
+            string constring = "Database=localhost;username=root;password=root";
+            string Query = "select * from database.Account;";
+
+            MySqlConnection conDatabase = new MySqlConnection(constring);
+            MySqlCommand cmdDatabase = new MySqlCommand(Query, conDatabase);
+            MySqlDataReader myReader;
+
+            try
+            {
+                conDatabase.Open();
+                myReader = cmdDatabase.ExecuteReader();
+                CheckBookWindow ck = new CheckBookWindow();
+                while (myReader.Read())
+                {
+                    string sAccount = myReader.GetString("Institution");
+                    ck.combo.Items.Add(sAccount);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

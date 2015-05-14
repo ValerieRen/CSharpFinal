@@ -24,6 +24,8 @@ namespace Calculator.CheckBook
             InitializeComponent();
         }
 
+
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var VM = new CheckBookVM();

@@ -6,11 +6,10 @@
         xmlns:local="clr-namespace:Calculator.CheckBook" 
         mc:Ignorable="d" 
         x:Class="Calculator.CheckBook.CheckBookWindow"
-        Title="Check Book Window" Height="330.314" Width="1000" Loaded="Window_Loaded" Name="root">
+        Title="Check Book Window" Height="330" Width="1000" Loaded="Window_Loaded" Name="root">
     <Window.Resources>
-        <CollectionViewSource x:Key="transactionViewSource" d:DesignSource="{d:DesignInstance {x:Type local:Transaction}, CreateList=True}"/>
     </Window.Resources>
-    <Grid DataContext="{StaticResource transactionViewSource}"  >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="244"/>
@@ -28,20 +27,20 @@
         <DataGrid x:Name="transactionsDataGrid" Grid.Column="2" Grid.Row="1" IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding CurrentTransactions}" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Account.Name}" Header="Account" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="amountColumn" Binding="{Binding Amount}" Header="Amount" Width="SizeToHeader"/>
-                <DataGridTemplateColumn x:Name="dateColumn" Header="Date" Width="SizeToHeader">
+                <DataGridTextColumn x:Name="amountColumn" Binding="{Binding Amount}" Header="Amount" Width="60"/>
+                <DataGridTemplateColumn x:Name="dateColumn" Header="Date" Width="130" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker SelectedDate="{Binding Date, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="payeeColumn" Binding="{Binding Payee}" Header="Payee" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="tagColumn" Binding="{Binding Tag}" Header="Tag" Width="*"/>
+                <DataGridTextColumn x:Name="payeeColumn" Binding="{Binding Payee}" Header="Payee" Width="60"/>
+                <DataGridTextColumn x:Name="tagColumn" Binding="{Binding Tag}" Header="Tag" Width="60"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <ListView  Grid.Column="1" ItemsSource="{Binding Transactions}" IsSynchronizedWithCurrentItem="True"  SelectionMode="Single" Grid.Row="0" Grid.RowSpan="2">
+        <ListView  Grid.Column="1" ItemsSource="{Binding Transactions}" IsSynchronizedWithCurrentItem="True"  SelectionMode="Single" Grid.RowSpan="2">
             <ListView.ItemContainerStyle>
                 <Style>
                     <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
@@ -51,14 +50,14 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Amount}" x:Name="amountColumn1" Header="Amount" Width="80" />
-                    <GridViewColumn x:Name="dateColumn1" Header="Date" Width="80">
+                    <GridViewColumn x:Name="dateColumn1" Header="Date" Width="160">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="-6,-1" Text="{Binding Date}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn x:Name="payeeColumn1" Header="Payee" Width="80">
+                    <GridViewColumn x:Name="payeeColumn1" Header="Payee" Width="90">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="-6,-1" Text="{Binding Payee}"/>
@@ -83,7 +82,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Account:" Grid.Column="0" HorizontalAlignment="Left" Margin="3,4,0,3" Grid.Row="0" VerticalAlignment="Center"/>
-            <ComboBox DisplayMemberPath="Name"  Grid.Column="1" SelectedItem="{Binding Account}" Height="Auto" ItemsSource="{Binding ElementName=root, Path=DataContext.Accounts}" Margin="3,6,3,5" Grid.Row="0" VerticalAlignment="Center" >
+            <ComboBox x:Name="combo" DisplayMemberPath="Name"  Grid.Column="1" SelectedItem="{Binding Account}" Height="Auto" ItemsSource="{Binding ElementName=root, Path=DataContext.Accounts}" Margin="3,6,3,5" Grid.Row="0" VerticalAlignment="Center" >
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel/>
