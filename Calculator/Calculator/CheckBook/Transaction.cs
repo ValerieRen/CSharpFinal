@@ -147,7 +147,7 @@ namespace Calculator.CheckBook
             {
                 return new DelegateCommand
                 {
-                    ExecuteFunction = _ => _Db.SaveChanges(),
+                    ExecuteFunction = _ => _Db.SaveChangesAsync(),// .SaveChanges(),
                     CanExecuteFunction = _ => _Db.ChangeTracker.HasChanges()
                 };
             }
@@ -211,7 +211,7 @@ namespace Calculator.CheckBook
             var http = new HttpClient();
 
             dynamic me = Newtonsoft.Json.JsonConvert.DeserializeObject(await http.GetStringAsync("https://graph.facebook.com/me?access_token=" + token));
-
+            
             Name = me.name;
             Picture = "https://graph.facebook.com/" + me.id + "/picture";
 
