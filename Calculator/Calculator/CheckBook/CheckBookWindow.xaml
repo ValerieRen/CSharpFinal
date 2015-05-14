@@ -6,13 +6,14 @@
         xmlns:local="clr-namespace:Calculator.CheckBook" 
         mc:Ignorable="d" 
         x:Class="Calculator.CheckBook.CheckBookWindow"
-        Title="Check Book Window" Height="330" Width="1000" Loaded="Window_Loaded" Name="root">
+        Title="Check Book Window" Height="450" Width="1000" Loaded="Window_Loaded" Name="root">
     <Window.Resources>
     </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="244"/>
+            <RowDefinition Height="336"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -23,24 +24,10 @@
         <GridSplitter Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Right" Grid.Row="1" />
         <GridSplitter Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
         <GridSplitter Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Grid.ColumnSpan="3" Grid.Row="1"/>
+        <Image Height="50" Width="50" Source="{Binding Picture}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="20" Margin="55,0,0,0" ></TextBlock>
 
-        <DataGrid x:Name="transactionsDataGrid" Grid.Column="2" Grid.Row="1" IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding CurrentTransactions}" RowDetailsVisibilityMode="VisibleWhenSelected">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Account.Name}" Header="Account" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="amountColumn" Binding="{Binding Amount}" Header="Amount" Width="60"/>
-                <DataGridTemplateColumn x:Name="dateColumn" Header="Date" Width="130" >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding Date, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="payeeColumn" Binding="{Binding Payee}" Header="Payee" Width="60"/>
-                <DataGridTextColumn x:Name="tagColumn" Binding="{Binding Tag}" Header="Tag" Width="60"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <ListView  Grid.Column="1" ItemsSource="{Binding Transactions}" IsSynchronizedWithCurrentItem="True"  SelectionMode="Single" Grid.RowSpan="2">
+        <ListView  Grid.Column="0" ItemsSource="{Binding Transactions}" IsSynchronizedWithCurrentItem="True"  SelectionMode="Single" Grid.Row="1">
             <ListView.ItemContainerStyle>
                 <Style>
                     <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
@@ -49,18 +36,72 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Amount}" x:Name="amountColumn1" Header="Amount" Width="80" />
-                    <GridViewColumn x:Name="dateColumn1" Header="Date" Width="160">
+                    <GridViewColumn x:Name="idColumn1" Header="Id" Width="30">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Margin="-6,-1" Text="{Binding Account.Id}"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
+                    <GridViewColumn x:Name="nameColumn1" Header="Name" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="-6,-1" Text="{Binding Account}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                        
+                    <GridViewColumn x:Name="institutionColumn1" Header="Institution" Width="90">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="-6,-1" Text="{Binding Account.Institution}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
+                    <GridViewColumn x:Name="businessColumn1" Header="Business" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Margin="-6,-1" IsChecked="{Binding Account.Business}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+
+        <ListView  Grid.Column="1" ItemsSource="{Binding Transactions}" IsSynchronizedWithCurrentItem="True"  SelectionMode="Single" Grid.Row="1">
+            <ListView.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Amount}" x:Name="amountColumn1" Header="Amount" Width="60" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Currency2}" x:Name="currency2Column1" Header="Currency 2" Width="70"/>
+
+                    <GridViewColumn x:Name="dateColumn1" Header="Date" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="-6,-1" Text="{Binding Date}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn x:Name="payeeColumn1" Header="Payee" Width="90">
+                    <GridViewColumn x:Name="payeeColumn1" Header="Payee" Width="60">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="-6,-1" Text="{Binding Payee}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="tagColumn1" Header="Tag" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="-6,-1" Text="{Binding Tag}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -68,7 +109,7 @@
             </ListView.View>
         </ListView>
 
-        <Grid DataContext="{Binding Transactions}" Grid.Column="0" Margin="0,0,0,5" Grid.RowSpan="2"  >
+        <Grid DataContext="{Binding Transactions}" Grid.Column="2" Margin="0,0,0,5" Grid.Row="1"  >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition />
@@ -82,7 +123,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Account:" Grid.Column="0" HorizontalAlignment="Left" Margin="3,4,0,3" Grid.Row="0" VerticalAlignment="Center"/>
-            <ComboBox x:Name="combo" DisplayMemberPath="Name"  Grid.Column="1" SelectedItem="{Binding Account}" Height="Auto" ItemsSource="{Binding ElementName=root, Path=DataContext.Accounts}" Margin="3,6,3,5" Grid.Row="0" VerticalAlignment="Center" >
+            <ComboBox DisplayMemberPath="Name" Grid.Column="1" SelectedItem="{Binding Account}" Height="Auto" ItemsSource="{Binding ElementName=root, Path=DataContext.Accounts}" Margin="3,6,3,5" Grid.Row="0" VerticalAlignment="Center" >
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel/>
@@ -110,15 +151,11 @@
             </ListBox>
         </Grid>
 
-
-        <Button Content="Account Edit" HorizontalAlignment="Left" Margin="122,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="92" Height="25" Click="ShowAccount"/>
-        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding CurrentPage}" Margin="145,0,199,0" RenderTransformOrigin="0.384,0.6"></TextBox>
-        <Button Grid.Row="2" Grid.Column="2" Command="{Binding MoveNext}" Margin="0,0,152,0" HorizontalAlignment="Right" Width="42" RenderTransformOrigin="0.476,0.64" >&gt;</Button>
-        <Button Grid.Row="2" Grid.Column="2" Command="{Binding MoveFront}" Margin="0,0,232,0" HorizontalAlignment="Right" Width="42" RenderTransformOrigin="0.476,0.64">&lt;</Button>
-        <Button Grid.Row="2" Grid.Column="2" Command="{Binding NewTransaction}" Margin="0,0,78,0" HorizontalAlignment="Right" Width="42" >Add</Button>
-        <Button Grid.Row="2" Grid.Column="2" Command="{Binding Remove}" HorizontalAlignment="Left" Width="53" Margin="299,0,0,0">Remove</Button>
-        <Button Grid.Row="2" Grid.Column="0" Command="{Binding Save}" Margin="0,0,18,0" HorizontalAlignment="Right" Width="40" >Save</Button>
-        <Label Content="Transactions" Grid.Column="2" HorizontalAlignment="Left" Margin="133,0,0,0" VerticalAlignment="Top" Height="26" Width="76"/>
-        <Button Content="Show Report" Grid.Column="1" HorizontalAlignment="Left" Margin="10,3,0,0" Grid.Row="2" VerticalAlignment="Top" Width="76" Click="Button_Click" Height="22"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentPage}" Margin="145,0,194,0" RenderTransformOrigin="0.384,0.6"></TextBox>
+        <Button Grid.Row="2" Grid.Column="1" Command="{Binding MoveNext}" Margin="0,0,152,0" HorizontalAlignment="Right" Width="42" RenderTransformOrigin="0.476,0.64" >&gt;</Button>
+        <Button Grid.Row="2" Grid.Column="1" Command="{Binding MoveFront}" Margin="0,0,232,0" HorizontalAlignment="Right" Width="42" RenderTransformOrigin="0.476,0.64">&lt;</Button>
+        <Button Grid.Row="2" Grid.Column="1" Command="{Binding NewTransaction}" Margin="0,0,78,0" HorizontalAlignment="Right" Width="42" >Add</Button>
+        <Button Grid.Row="2" Grid.Column="2" Command="{Binding Save}" Margin="0,0,18,0" HorizontalAlignment="Right" Width="40" >Save</Button>
+        <Button Content="Show Report" HorizontalAlignment="Left" Margin="195,1,0,0" Grid.Row="2" VerticalAlignment="Top" Width="76" Click="Button_Click" Height="22"/>
     </Grid>
 </Window>

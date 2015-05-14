@@ -36,12 +36,6 @@ namespace Calculator.CheckBook
             // transactionViewSource.Source = [generic data source]
         }
 
-        private void ShowAccount(object sender, RoutedEventArgs e)
-        {
-            AccountEditWindow accEdit = new AccountEditWindow();
-            accEdit.ShowDialog();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ReportForm rp = new ReportForm();

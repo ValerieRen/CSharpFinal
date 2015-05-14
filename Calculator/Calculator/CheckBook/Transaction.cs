@@ -75,15 +75,14 @@ namespace Calculator.CheckBook
 
 
     }
-
     public class Account
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Institution { get; set; }
-        public bool Business { get; set; }
-
+        public bool Business{ get; set; }
         public virtual IList<Transaction> Transactions { get; set; }
+
     }
 
     public class CheckBookVM : BaseVM
@@ -108,15 +107,7 @@ namespace Calculator.CheckBook
             get { return _Transactions; }
             set { _Transactions = value; OnPropertyChanged(); OnPropertyChanged("Accounts"); }
         }
-
-        private ObservableCollection<Account> _Accounts;
-        public ObservableCollection<Account> Accounts
-        {
-            get { return _Accounts; }
-            set { _Accounts = value; OnPropertyChanged(); OnPropertyChanged("Institution"); }
-        }
-
-        public IEnumerable<Account> CurrentAccount
+        public IEnumerable<Account> Accounts
         {
             get { return _Db.Accounts.Local; }
         }
@@ -124,41 +115,6 @@ namespace Calculator.CheckBook
         public IEnumerable<Transaction> CurrentTransactions
         {
             get { return Transactions.Skip((_CurrentPage - 1) * _RowsPerPage).Take(_RowsPerPage); }
-        }
-
-        public DelegateCommand NewAccount
-        {
-            get
-            {
-                return new DelegateCommand
-                {
-                    ExecuteFunction = _ =>
-                    {
-                        Accounts.Add(new Account { });
-                    }
-                };
-            }
-        }
-
-        public DelegateCommand RemoveAccount
-        {
-            get
-            {
-                return new DelegateCommand
-                {
-                    ExecuteFunction = _ =>
-                    {
-                        foreach (Account acc in Accounts)
-                        {
-
-                            if (acc.Id == CurrentAccount.ElementAt(0).Id)
-                            {
-                                Accounts.Remove(acc);
-                            }
-                        }
-                    }
-                };
-            }
         }
 
         public DelegateCommand MoveFront
@@ -212,21 +168,6 @@ namespace Calculator.CheckBook
             }
         }
 
-        public DelegateCommand Remove
-        {
-            get
-            {
-                return new DelegateCommand
-                {
-                    ExecuteFunction = _ =>
-                    {
-                        Transactions.Remove(CurrentTransactions.ElementAt(0));
-                        CurrentPage = Transactions.Count / _RowsPerPage - 1;
-                    }
-                };
-            }
-        }
-
         private Rates _CurrentRates;
         public Rates CurrentRates
         {
@@ -269,22 +210,6 @@ namespace Calculator.CheckBook
 
             var http = new HttpClient();
 
-            dynamic me = Newtonsoft.Json.JsonConvert.DeserializeObject(await http.GetStringAsync(token));
-
-            Name = me.name;
-            Picture = me.id;
-
-            var results = await http.GetAsync("http://openexchangerates.org/api/latest.json?app_id=2f23629162b444b580bc03970c41caad");
-            var currencies = await results.Content.ReadAsAsync<ExchageRate>();
-            CurrentRates = currencies.rates;
-            ExchangeRateSing.Instance.Rates = currencies.rates;
-            OnPropertyChanged("CurrentTransactions"); OnPropertyChanged("Transactions");
-
-            /*var wnd = new LoginWindow();
-            var token = await wnd.Login();
-
-            var http = new HttpClient();
-
             dynamic me = Newtonsoft.Json.JsonConvert.DeserializeObject(await http.GetStringAsync("https://graph.facebook.com/me?access_token=" + token));
 
             Name = me.name;
@@ -295,7 +220,6 @@ namespace Calculator.CheckBook
             CurrentRates = currencies.rates;
             ExchangeRateSing.Instance.Rates = currencies.rates;
             OnPropertyChanged("CurrentTransactions"); OnPropertyChanged("Transactions");
-            */
         }
     }
 
