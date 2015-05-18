@@ -55,8 +55,8 @@ namespace Model
             //   consumerSecret: "");
 
             app.UseFacebookAuthentication(
-               appId: "104683793199061",
-               appSecret: "b02c6cc07352bf6b6e245a231d76fbcb");
+               appId: "818765891553808",
+               appSecret: "5d27dd1ec29397a35e86b8a02251ab1c");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
