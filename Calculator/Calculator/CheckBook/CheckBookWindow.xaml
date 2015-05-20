@@ -109,7 +109,7 @@
             </ListView.View>
         </ListView>
 
-        <Grid DataContext="{Binding Transactions}" Grid.Column="2" Margin="0,0,0,5" Grid.Row="1"  >
+        <Grid x:Name="Tsction" DataContext="{Binding Transactions}" Grid.Column="2" Margin="0,0,0,5" Grid.Row="1" Background="#FF3E8ED1" IsEnabledChanged="Tsction_IsEnabledChanged">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition />

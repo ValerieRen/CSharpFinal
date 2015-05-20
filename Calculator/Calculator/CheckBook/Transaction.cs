@@ -14,6 +14,7 @@ namespace Calculator.CheckBook
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Account> Accounts { get; set; }
     }
+
     public class Transaction : BaseVM
     {
         public int Id { get; set; }

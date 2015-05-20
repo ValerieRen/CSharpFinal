@@ -41,5 +41,14 @@ namespace Calculator.CheckBook
             ReportForm rp = new ReportForm();
             rp.Show();
         }
+        private bool ismaxAmount = true;
+        public void Background()
+        {           
+            if(ismaxAmount)
+            {
+                Brush newColor = Brushes.Red;
+                Tsction.Background = (SolidColorBrush)newColor;
+            }
+        }
     }
 }
